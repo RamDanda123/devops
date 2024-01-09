@@ -1,0 +1,1 @@
+for /f "tokens=3" %%i in ('aws s3 ls') do aws s3 rb s3://%%i --force
