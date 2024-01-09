@@ -6,7 +6,6 @@ Parameters:
     Description: Enter vpc id
   InstanceList:
     Type: CommaDelimitedList
-    Default: ["instance1", "instance2"]
 Resources:
   MyKeyPair:
     Type: 'AWS::EC2::KeyPair'
