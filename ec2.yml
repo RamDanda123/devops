@@ -1,10 +1,29 @@
 AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  myVPC:
+    Type: String
+    Default: "vpc-0a7e507ae6849cf80"
+    Description: Enter vpc id
 Resources:
   MyKeyPair:
     Type: 'AWS::EC2::KeyPair'
     Properties:
       KeyName: "MyKeyPair"
-  #MySecurityGroup:
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to client host
+      VpcId: !Ref myVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
   
   MyEC2Instance: 
     Type: AWS::EC2::Instance
@@ -13,5 +32,5 @@ Resources:
       KeyName: !Ref MyKeyPair
       InstanceType: "t2.micro"
       SecurityGroupIds: 
-        - "sg-01677a44e63d897be"
+        - !Ref InstanceSecurityGroup
       SubnetId: "subnet-09377a43c76e65fdb"
