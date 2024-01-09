@@ -4,7 +4,7 @@ Resources:
 
   MySecurityGroup:
   
-    MyEC2Instance: 
+  MyEC2Instance: 
     Type: AWS::EC2::Instance
     Properties: 
       ImageId: "ami-0005e0cfe09cc9050"
