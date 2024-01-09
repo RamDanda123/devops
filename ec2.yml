@@ -1,14 +1,16 @@
 AWSTemplateFormatVersion: 2010-09-09
 Resources:
   MyKeyPair:
-
+    Type: 'AWS::EC2::KeyPair'
+    Properties:
+      KeyName: "MyKeyPair"
   MySecurityGroup:
   
   MyEC2Instance: 
     Type: AWS::EC2::Instance
     Properties: 
       ImageId: "ami-0005e0cfe09cc9050"
-      KeyName: "virginia"
+      KeyName: !Ref MyKeyPair
       InstanceType: "t2.micro"
       SecurityGroupIds: 
         - "sg-01677a44e63d897be"
