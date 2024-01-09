@@ -5,7 +5,7 @@ Parameters:
     Default: "vpc-0a7e507ae6849cf80"
     Description: Enter vpc id
   InstanceList:
-    Type: List<String>
+    Type: CommaDelimitedList
     Default: "instance1,instance2"
 Resources:
   MyKeyPair:
@@ -44,7 +44,7 @@ Resources:
 
   Fn::ForEach::Instances:
     - InstanceLogicalId
-    - !Split [",", !Ref InstanceList]
+    - !Ref InstanceList
     - ${InstanceLogicalId}:
         Type: AWS::EC2::Instance
         Properties:
