@@ -12,6 +12,23 @@ Parameters:
     Type: String
     Default: "t2.micro"
     AllowedValues: ["t2.micro","t2.small","t2.medium"]
+Mappings: 
+  RegionMap: 
+    us-east-1: 
+      HVM64: "ami-0005e0cfe09cc9050"
+      HVMG2: "ami-0005e0cfe09cc9050"
+    us-west-1: 
+      HVM64: "ami-0bdb828fd58c52235"
+      HVMG2: "ami-066ee5fd4a9ef77f1"
+    eu-west-1: 
+      HVM64: "ami-047bb4163c506cd98"
+      HVMG2: "ami-31c2f645"
+    ap-southeast-1: 
+      HVM64: "ami-08569b978cc4dfa10"
+      HVMG2: "ami-0be9df32ae9f92309"
+    ap-northeast-1: 
+      HVM64: "ami-06cd52961ce9f0d85"
+      HVMG2: "ami-053cdd503598e4a9d"
 Resources:
   Fn::ForEach::Instances:
     - InstanceLogicalId
@@ -19,7 +36,10 @@ Resources:
     - ${InstanceLogicalId}:
         Type: AWS::EC2::Instance
         Properties:
-          ImageId: "ami-0005e0cfe09cc9050"
+          ImageId: !FindInMap
+            - RegionMap
+            - !Ref 'AWS::Region'
+            - HVM64
           InstanceType: !Ref instanceType
           KeyName: !Ref MyKeyPair
           SecurityGroupIds: 
