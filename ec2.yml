@@ -4,6 +4,9 @@ Parameters:
     Type: String
     Default: "vpc-0a7e507ae6849cf80"
     Description: Enter vpc id
+  InstanceList:
+    Type: list
+    Default: ["instance1","instance2"]
 Resources:
   MyKeyPair:
     Type: 'AWS::EC2::KeyPair'
@@ -38,3 +41,12 @@ Resources:
       SecurityGroupIds: 
         - !Ref InstanceSecurityGroup
       SubnetId: "subnet-09377a43c76e65fdb"
+
+  Fn::ForEach::Instances:
+    - InstanceLogicalId
+    - !Ref InstanceList
+    - ${InstanceLogicalId}:
+        Type: AWS::EC2::Instance
+        Properties:
+          ImageId: "ami-0005e0cfe09cc9050"
+          InstanceType: t2.micro
