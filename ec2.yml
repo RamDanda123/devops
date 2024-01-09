@@ -1,4 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::LanguageExtensions
 Parameters:
   myVPC:
     Type: String
@@ -6,7 +7,16 @@ Parameters:
     Description: Enter vpc id
   InstanceList:
     Type: CommaDelimitedList
+    Default: "instance1,instance2"
 Resources:
+  Fn::ForEach::Instances:
+    - InstanceLogicalId
+    - !Ref InstanceList
+    - ${InstanceLogicalId}:
+        Type: AWS::EC2::Instance
+        Properties:
+          ImageId: "ami-0005e0cfe09cc9050"
+          InstanceType: "t2.micro"
   MyKeyPair:
     Type: 'AWS::EC2::KeyPair'
     Properties:
@@ -40,12 +50,3 @@ Resources:
       SecurityGroupIds: 
         - !Ref InstanceSecurityGroup
       SubnetId: "subnet-09377a43c76e65fdb"
-
-  Fn::ForEach::Instances:
-    - InstanceLogicalId
-    - !Ref InstanceList
-    - ${InstanceLogicalId}:
-        Type: AWS::EC2::Instance
-        Properties:
-          ImageId: "ami-0005e0cfe09cc9050"
-          InstanceType: t2.micro
