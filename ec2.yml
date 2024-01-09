@@ -8,6 +8,10 @@ Parameters:
   InstanceList:
     Type: CommaDelimitedList
     Default: "instance1,instance2"
+  instanceType:
+    Type: String
+    Default: "t2.micro"
+    AllowedValues: ["t2.micro","t2.small","t2.medium"]
 Resources:
   Fn::ForEach::Instances:
     - InstanceLogicalId
@@ -16,7 +20,11 @@ Resources:
         Type: AWS::EC2::Instance
         Properties:
           ImageId: "ami-0005e0cfe09cc9050"
-          InstanceType: "t2.micro"
+          InstanceType: !Ref instanceType
+          KeyName: !Ref MyKeyPair
+          SecurityGroupIds: 
+            - !Ref InstanceSecurityGroup
+          SubnetId: "subnet-09377a43c76e65fdb"
   MyKeyPair:
     Type: 'AWS::EC2::KeyPair'
     Properties:
