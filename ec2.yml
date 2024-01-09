@@ -44,7 +44,7 @@ Resources:
 
   Fn::ForEach::Instances:
     - InstanceLogicalId
-    - !Ref InstanceList
+    - !Split [",", !Ref InstanceList]
     - ${InstanceLogicalId}:
         Type: AWS::EC2::Instance
         Properties:
