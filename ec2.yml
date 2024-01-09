@@ -4,7 +4,7 @@ Resources:
     Type: 'AWS::EC2::KeyPair'
     Properties:
       KeyName: "MyKeyPair"
-  MySecurityGroup:
+  #MySecurityGroup:
   
   MyEC2Instance: 
     Type: AWS::EC2::Instance
