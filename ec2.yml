@@ -83,9 +83,21 @@ Resources:
       UserData: 
         Fn::Base64: 
           !Sub |
-          #!/bin/bash -xe
-          sudo yum update -y
-          sudo yum install -y httpd.x86_64
-          sudo service httpd start
-          sudo service httpd enable
-          sudo sh -c "echo '<h1>Deployed ELB Instance Example 1</h1>' >> /var/www/html/index.html"
+            #!/bin/bash
+            yum update -y
+            sudo yum install -y httpd.x86_64
+            cat <<EOF > /var/www/html/index.html
+            <!DOCTYPE html>
+            <html>
+            <head>
+            <title>Garrett's Webpage</title>
+            </head>
+            <body>
+
+            <h1>Welcome to Garrett's Sweet Webpage</h1>
+            <p>This is a paragraph.</p>
+
+            </body>
+            </html>
+            EOF   
+            systemctl start httpd
