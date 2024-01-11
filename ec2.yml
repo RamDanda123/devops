@@ -82,7 +82,7 @@ Resources:
       SubnetId: "subnet-09377a43c76e65fdb"
       UserData: 
         Fn::Base64: 
-          Fn::Sub:
+          !Sub |
           #!/bin/bash -xe
           sudo yum update -y
           sudo yum install -y httpd.x86_64
