@@ -4,7 +4,7 @@ Parameters:
   # myVPC:
   #   Type: String
   #   Default: "vpc-0a7e507ae6849cf80"
-    Description: Enter vpc id
+  #   Description: Enter vpc id
   InstanceList:
     Type: CommaDelimitedList
     Default: "instance1,instance2"
