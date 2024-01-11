@@ -84,9 +84,9 @@ Resources:
         Fn::Base64: 
           !Sub |
             #!/bin/bash
-            yum update -y
-            yum install -y httpd.x86_64
-            cat <<EOF > /var/www/html/index.html
+            sudo yum update -y
+            sudo yum install -y httpd.x86_64
+            sudo cat <<EOF > /var/www/html/index.html
             <!DOCTYPE html>
             <html>
             <head>
@@ -100,5 +100,5 @@ Resources:
             </body>
             </html>
             EOF   
-            systemctl enable httpd
-            systemctl restart httpd
+            sudo systemctl enable httpd
+            sudo systemctl restart httpd
