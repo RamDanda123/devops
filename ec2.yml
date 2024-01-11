@@ -30,21 +30,21 @@ Mappings:
       HVM64: "ami-06cd52961ce9f0d85"
       HVMG2: "ami-053cdd503598e4a9d"
 Resources:
-  Fn::ForEach::Instances:
-    - InstanceLogicalId
-    - !Ref InstanceList
-    - ${InstanceLogicalId}:
-        Type: AWS::EC2::Instance
-        Properties:
-          ImageId: !FindInMap
-            - RegionMap
-            - !Ref 'AWS::Region'
-            - HVM64
-          InstanceType: !Ref instanceType
-          KeyName: !Ref MyKeyPair
-          SecurityGroupIds: 
-            - !Ref InstanceSecurityGroup
-          SubnetId: "subnet-09377a43c76e65fdb"
+  # Fn::ForEach::Instances:
+  #   - InstanceLogicalId
+  #   - !Ref InstanceList
+  #   - ${InstanceLogicalId}:
+  #       Type: AWS::EC2::Instance
+  #       Properties:
+  #         ImageId: !FindInMap
+  #           - RegionMap
+  #           - !Ref 'AWS::Region'
+  #           - HVM64
+  #         InstanceType: !Ref instanceType
+  #         KeyName: !Ref MyKeyPair
+  #         SecurityGroupIds: 
+  #           - !Ref InstanceSecurityGroup
+  #         SubnetId: "subnet-09377a43c76e65fdb"
   MyKeyPair:
     Type: 'AWS::EC2::KeyPair'
     Properties:
@@ -72,9 +72,21 @@ Resources:
   MyEC2Instance: 
     Type: AWS::EC2::Instance
     Properties: 
-      ImageId: "ami-0005e0cfe09cc9050"
+      ImageId: 
+         !FindInMap
+          - RegionMap
+          - !Ref 'AWS::Region'
+          - HVM64
       KeyName: !Ref MyKeyPair
-      InstanceType: "t2.micro"
+      InstanceType: !Ref instanceType
       SecurityGroupIds: 
         - !Ref InstanceSecurityGroup
       SubnetId: "subnet-09377a43c76e65fdb"
+      UserData: 
+        Fn::Base64: !Sub |
+        #!/bin/bash -xe
+        sudo yum update -y
+        sudo yum install -y httpd.x86_64
+        sudo service httpd start
+        sudo service httpd enable
+        echo "<h1>Deployed ELB Instance Example 1</h1>" | sudo tee /var/www/html/index.html
