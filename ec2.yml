@@ -67,37 +67,38 @@ Resources:
         - IpProtocol: "-1"
           CidrIp: 0.0.0.0/0
   
-  # MyEC2Instance: 
-  #   Type: AWS::EC2::Instance
-  #   Properties: 
-  #     ImageId: 
-  #        !FindInMap
-  #         - RegionMap
-  #         - !Ref 'AWS::Region'
-  #         - HVM64
-  #     KeyName: !Ref MyKeyPair
-  #     InstanceType: !Ref instanceType
-  #     SecurityGroupIds: 
-  #       - !Ref InstanceSecurityGroup
-  #     SubnetId: "subnet-09377a43c76e65fdb"
-  #     UserData: 
-  #       Fn::Base64: 
-  #         !Sub |
-  #           #!/bin/bash
-  #           yum update -y
-  #           sudo yum install -y httpd.x86_64
-  #           cat <<EOF > /var/www/html/index.html
-  #           <!DOCTYPE html>
-  #           <html>
-  #           <head>
-  #           <title>Garrett's Webpage</title>
-  #           </head>
-  #           <body>
+  MyEC2Instance: 
+    Type: AWS::EC2::Instance
+    Properties: 
+      ImageId: 
+         !FindInMap
+          - RegionMap
+          - !Ref 'AWS::Region'
+          - HVM64
+      KeyName: !Ref MyKeyPair
+      InstanceType: !Ref instanceType
+      SecurityGroupIds: 
+        - !Ref InstanceSecurityGroup
+      SubnetId: "subnet-09377a43c76e65fdb"
+      UserData: 
+        Fn::Base64: 
+          !Sub |
+            #!/bin/bash
+            yum update -y
+            sudo yum install -y httpd.x86_64
+            cat <<EOF > /var/www/html/index.html
+            <!DOCTYPE html>
+            <html>
+            <head>
+            <title>Garrett's Webpage</title>
+            </head>
+            <body>
 
-  #           <h1>Welcome to Garrett's Sweet Webpage</h1>
-  #           <p>This is a paragraph.</p>
+            <h1>Welcome to Garrett's Sweet Webpage</h1>
+            <p>This is a paragraph.</p>
 
-  #           </body>
-  #           </html>
-  #           EOF   
-  #           systemctl start httpd
+            </body>
+            </html>
+            EOF   
+            systemctl enable httpd
+            systemctl restart httpd
