@@ -1,9 +1,9 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::LanguageExtensions
 Parameters:
-  myVPC:
-    Type: String
-    Default: "vpc-0a7e507ae6849cf80"
+  # myVPC:
+  #   Type: String
+  #   Default: "vpc-0a7e507ae6849cf80"
     Description: Enter vpc id
   InstanceList:
     Type: CommaDelimitedList
@@ -45,6 +45,25 @@ Resources:
   #         SecurityGroupIds: 
   #           - !Ref InstanceSecurityGroup
   #         SubnetId: "subnet-09377a43c76e65fdb"
+  myVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: 'true'
+      EnableDnsHostnames: 'true'
+      Tags:
+      - Key: stack
+        Value: production
+  mySubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: myVPC
+      CidrBlock: 10.0.0.0/24
+      AvailabilityZone: "us-east-1a"
+      Tags:
+      - Key: stack
+        Value: production
   MyKeyPair:
     Type: 'AWS::EC2::KeyPair'
     Properties:
@@ -79,26 +98,14 @@ Resources:
       InstanceType: !Ref instanceType
       SecurityGroupIds: 
         - !Ref InstanceSecurityGroup
-      SubnetId: "subnet-09377a43c76e65fdb"
+      SubnetId: !Ref mySubnet
       UserData: 
         Fn::Base64: 
           !Sub |
-            #!/bin/bash
+            #! /bin/bash
             sudo yum update -y
             sudo yum install -y httpd.x86_64
-            sudo cat <<EOF > /var/www/html/index.html
-            <!DOCTYPE html>
-            <html>
-            <head>
-            <title>Garrett's Webpage</title>
-            </head>
-            <body>
-
-            <h1>Welcome to Garrett's Sweet Webpage</h1>
-            <p>This is a paragraph.</p>
-
-            </body>
-            </html>
-            EOF   
-            sudo systemctl enable httpd
-            sudo systemctl restart httpd
+            sudo service httpd start
+            sudo service httpd enable
+            echo "<h1>Deployed ELB Instance Example 1</h1>" > /tmp/index.html
+            sudo mv /tmp/index.html /var/www/html/index.html
